@@ -55,9 +55,9 @@ def get_publishing_data(starting_year, starting_month):
                 for col in HEADERS:
                     data[col].append(json_results[col])
                 print("processed results for %s-%s" % (start_date.year, start_date.month))
-            except JSONDecodeError:
+            except Exception as e:
                 json_results = None
-                print("Error decoding JSON results for %s" % url)
+                print(f"Error {e} decoding JSON results for {url}")
         else:
             print("%s error processing results for %s" % (response.status_code, url))
         start_date = start_date + relativedelta(months=1)
@@ -146,8 +146,8 @@ def get_most_active_data(starting_year, starting_month):
         if response.status_code == 200:
             try:
                 extract_most_active_data_from_json(most_active, response.json(), start_date.year, start_date.month)                
-            except JSONDecodeError:
-                print("Error decoding JSON results for %s" % url)
+            except Exception as e:
+                print(f"Error {e} decoding JSON results for {url}")
         else:
             print("%s error processing results for %s" % (response.status_code, url))
         start_date = start_date + relativedelta(months=1)
@@ -155,18 +155,8 @@ def get_most_active_data(starting_year, starting_month):
     return process_most_active_data(most_active)
 
 if __name__ == '__main__':
-    reports = get_available_reports()
-    starting_year = os.getenv('STARTING_YEAR', None)
-    starting_month = os.getenv('STARTING_MONTH', None)
-    if starting_year is None or starting_month is None:
-        year = list(reports.keys())[0]
-        starting_year = int(year)
-        starting_month = int(reports[year][0])
-    else:
-        starting_year = int(starting_year)
-        starting_month = int(starting_month)
 
-    most_active_dfs = get_most_active_data(starting_year, starting_month)
+    most_active_dfs = get_most_active_data(2021, 11)
     for key in most_active_dfs:
         print(key)
         dates = most_active_dfs[key]['date']

@@ -10,9 +10,13 @@ import os
 import calendar
 import time
 from urllib.parse import urlparse
+from dotenv import load_dotenv
+
+# Load variables from .env into os.environ
+load_dotenv()
 
 API_URL = 'https://betteruptime.com/api/v2'
-TOKEN = os.getenv('TOKEN')
+TOKEN = os.getenv('BETTER_STACK_TOKEN')
 HEADERS = {'Authorization': 'Bearer %s' % TOKEN}
 
 def make_api_call(url):

@@ -38,68 +38,6 @@ def convert_date_str(input_str):
     return_str = date.strftime("%-m/%-d/%Y")
     return return_str
 
-def get_all_extensions_old():
-    MS_API_URL = 'https://marketplace.visualstudio.com/_apis/public/gallery/extensionquery'
-    MS_HEADERS = {
-        'content-type': 'application/json',
-        'accept': 'application/json;api-version=3.0-preview.1',
-        'accept-encoding': 'gzip'
-    }
-    # Looks like 1000 is the max page size
-    get_all_extensions_payload = {
-        "assetTypes": [
-            "Microsoft.VisualStudio.Services.Icons.Default",
-            "Microsoft.VisualStudio.Services.Icons.Branding",
-            "Microsoft.VisualStudio.Services.Icons.Small"
-        ],
-        "filters": [
-            {
-                "criteria": [
-                    {
-                        "filterType": 8,
-                        "value": "Microsoft.VisualStudio.Code"
-                    },
-                    {
-                        "filterType": 10,
-                        "value": "target:\"Microsoft.VisualStudio.Code\" "
-                    },
-                    {
-                        "filterType": 12,
-                        "value": "37888"
-                    }
-                ],
-                "direction": 2,
-                "pageSize": 1000,
-                "pageNumber": 1,
-                "sortBy": 4,
-                "sortOrder": 0,
-                "pagingToken": None
-            }
-        ],
-        # "flags": 870
-        "flags": 914
-    }
-    all_extensions = []
-    total_all_versions = 0
-    while True:
-        response = requests.post(MS_API_URL, headers=MS_HEADERS, data=json.dumps(get_all_extensions_payload))
-        response.raise_for_status()
-        time.sleep(5)
-        vsx_results = response.json()
-        extensions = vsx_results['results'][0]['extensions']
-        # for extension in extensions:
-        #     license = get_license(extension)
-        #     extension['license'] = license
-        all_extensions = all_extensions + extensions
-        print(f'Retrieved {len(extensions)} new extensions. {len(all_extensions)} total extensions.')
-        if len(extensions) == 0:
-            break
-        else:
-            get_all_extensions_payload['filters'][0]['pageNumber'] = get_all_extensions_payload['filters'][0]['pageNumber'] + 1
-
-    return all_extensions
-
-
 def get_all_extensions():
     MS_API_URL = 'https://marketplace.visualstudio.com/_apis/public/gallery/extensionquery'
     MS_HEADERS = {

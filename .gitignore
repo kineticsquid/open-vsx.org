@@ -5,3 +5,11 @@
 /jsonnet-generated-staging/
 /charts/openvsx/charts
 .DS_Store
+.env
+.config.env
+env.yaml
+*.csv
+*.tsv
+*.json
+*.xls
+*.xlsx

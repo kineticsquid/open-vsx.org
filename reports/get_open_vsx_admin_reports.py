@@ -10,27 +10,29 @@ which is ignored.
 """
 
 import requests
-from requests.auth import HTTPBasicAuth
 from datetime import date
 from dateutil.relativedelta import relativedelta
 import pandas as pd
 import os
 import json
-from json import JSONDecodeError
+from dotenv import load_dotenv
 
-API_ENDPOINT = os.getenv('API_ENDPOINT')
-ACCESS_TOKEN = os.getenv('ACCESS_TOKEN')
+# Load variables from .env into os.environ
+load_dotenv()
+
+ADMIN_REPORTS_ENDPOINT = 'https://open-vsx.org/admin/'
+OPEN_VSX_ACCESS_TOKEN = os.getenv('OPEN_VSX_ACCESS_TOKEN')
 
 HEADERS = ['year', 'month', 'extensions', 'downloads', 'downloadsTotal', 'publishers', 'averageReviewsPerExtension', 'namespaceOwners']
 
 def get_available_reports():
-    url = '%sadmin/reports?token=%s' % (API_ENDPOINT, ACCESS_TOKEN)
+    url = f'{ADMIN_REPORTS_ENDPOINT}reports?token={ADMIN_REPORTS_ENDPOINT}'
     response = requests.get(url)
     results = response.json()
     return results
 
 def schedule_report(year, month):
-    url = '%sadmin/report/schedule?token=%s' % (API_ENDPOINT, ACCESS_TOKEN)
+    url = f'{ADMIN_REPORTS_ENDPOINT}report/schedule?token={ADMIN_REPORTS_ENDPOINT}'
     headers = {"Content-Type": "application/json"}
     payload = {
         'year': year,
@@ -47,7 +49,7 @@ def get_publishing_data(starting_year, starting_month):
     for header in HEADERS:
         data[header] = []
     while start_date.year < today.year or (start_date.year == today.year and start_date.month < today.month):
-        url = '%sadmin/report?year=%s&month=%s&token=%s' % (API_ENDPOINT, start_date.year, start_date.month, ACCESS_TOKEN)
+        url = f'{ADMIN_REPORTS_ENDPOINT}report?year={start_date.year}&month={start_date.month}&token={OPEN_VSX_ACCESS_TOKEN}'
         response = requests.get(url)
         if response.status_code == 200:
             try:
@@ -141,7 +143,7 @@ def get_most_active_data(starting_year, starting_month):
     today = date.today()
     start_date = date(starting_year, starting_month, 1)
     while start_date.year < today.year or (start_date.year == today.year and start_date.month < today.month):
-        url = '%sadmin/report?year=%s&month=%s&token=%s' % (API_ENDPOINT, start_date.year, start_date.month, ACCESS_TOKEN)
+        url = f'{ADMIN_REPORTS_ENDPOINT}report?year={start_date.year}&month={start_date.month}&token={OPEN_VSX_ACCESS_TOKEN}'
         response = requests.get(url)
         if response.status_code == 200:
             try:

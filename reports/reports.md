@@ -6,13 +6,6 @@ Reports and supporting scripts for graphing availability and activity at open-vs
 Many of these notebooks require access tokens or secrets of some form. They should be defined in an `.env` file in the same folder in this form.
 ```
 OPEN_VSX_ACCESS_TOKEN='****************'
-GITHUB_ACCESS_TOKEN='****************'
-REDIS_HOST='redis-**************.cloud.redislabs.com'
-REDIS_PORT=*****
-REDIS_PW='****************'
-GMAIL_ID='fred@flintstones.com'
-GMAIL_PW='****************'
-TARGET_EMAIL='wilma@flintstones.com'
 BETTER_STACK_TOKEN='****************'
 ```
 

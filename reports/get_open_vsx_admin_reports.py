@@ -26,7 +26,7 @@ OPEN_VSX_ACCESS_TOKEN = os.getenv('OPEN_VSX_ACCESS_TOKEN')
 HEADERS = ['year', 'month', 'extensions', 'downloads', 'downloadsTotal', 'publishers', 'averageReviewsPerExtension', 'namespaceOwners']
 
 def get_available_reports():
-    url = f'{ADMIN_REPORTS_ENDPOINT}reports?token={ADMIN_REPORTS_ENDPOINT}'
+    url = f'{ADMIN_REPORTS_ENDPOINT}reports?token={OPEN_VSX_ACCESS_TOKEN}'
     response = requests.get(url)
     results = response.json()
     return results
